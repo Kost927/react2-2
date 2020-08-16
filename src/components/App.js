@@ -4,46 +4,92 @@ import { v4 as uuidv4 } from "uuid";
 
 class App extends Component {
   state = {
-    contacts: [],
-    name: ""
+    contacts: [
+      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+      { id: "id-4", name: "Annie Copeland", number: "227-91-26" }
+    ],
+    filter: "",
+    name: "",
+    number: ""
   };
 
-handleSubmit = (e) => {
-e.preventDefault()
-const { name } = this.state;
-this.setState(prevState => ({contacts: [...prevState.contacts, {name}]}))
+  chengeFilter = filter => {
+    //   console.log(filter)
+    this.setState({ filter });
+  };
 
-}
+  findContacts = () => {
+    // return this.state.filter
+    //   ? this.state.contacts.filter((contact) =>
+    //       contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
+    //     )
+    //   : this.state.contacts;
+    const { filter, contacts } = this.state;
+    return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
+  };
 
-addName = (e) => {
-    const { value } = e.target;
+  handleSubmit = e => {
+    e.preventDefault();
+    const { name, number, contacts } = this.state;
+    const sameContact = contacts.map(contact => contact.name);
+    if (sameContact.find(addedName => addedName === name)) {
+      alert(`${name} is already in your contacts`);
+    } else {
+      this.setState(prevState => ({ contacts: [...prevState.contacts, { id: uuidv4(), name, number }] }));
+    }
+    this.setState({ name: "", number: "" });
+  };
+
+  addContact = e => {
+    const { name, value } = e.target;
     this.setState({
-        name: value,
-    })
-}
+      [name]: value
+    });
+  };
 
-
+  removePhone = phoneId => {
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(contact => contact.id !== phoneId)
+      };
+    });
+  };
 
   render() {
-      const {name} = this.state
+    const { filter, name, number } = this.state;
+    const filteredContacts = this.findContacts();
     return (
       <>
         <h2>Phonebook</h2>
         <form onSubmit={this.handleSubmit}>
           <label>
-            Name: <input type="text" value={name} name="name" onChange={this.addName}/>
+            Name: <input type="text" value={name} name="name" onChange={this.addContact} />
           </label>
 
-          <button type="submit">
-            Add contacts
-          </button>
+          <label>
+            Number: <input type="tel" value={number} name="number" onChange={this.addContact} />
+          </label>
+
+          <button type="submit">Add contacts</button>
         </form>
 
         <h2>Contacts</h2>
+        <p>Find contacts by name</p>
+        <label>
+          Filter: <input type="text" value={filter} name="filter" onChange={e => this.chengeFilter(e.target.value)} />
+        </label>
+
         <ul>
-          <li id={uuidv4()}  name="name" >
-            {this.state.name}
-          </li>
+          {filteredContacts.map(contact => (
+            <li key={contact.id} name="name">
+              {contact.name}: {contact.number}
+              <button type="button" onClick={() => this.removePhone(contact.id)}>
+                Delete
+              </button>
+            </li>
+          ))}
         </ul>
       </>
     );
