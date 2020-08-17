@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.module.css";
 import { v4 as uuidv4 } from "uuid";
 import ContactsList from "./contactslist/ContactsList";
-import ContactsListItem from './ContactsListItem/ContactsListItem';
+import ContactsListItem from "./ContactsListItem/ContactsListItem";
 import Form from "./Form/Form";
 
 class App extends Component {
@@ -63,25 +63,19 @@ class App extends Component {
     const { filter, name, number, contacts } = this.state;
     const filteredContacts = this.findContacts();
     return (
-
       <>
         <Form
-        handleSubmit={this.handleSubmit}
-        name={name}
-        number={number}
-        addContact={this.addContact}
-        filter={filter}
-        chengeFilter={e => this.chengeFilter(e.target.value)}
+          handleSubmit={this.handleSubmit}
+          name={name}
+          number={number}
+          addContact={this.addContact}
+          filter={filter}
+          chengeFilter={e => this.chengeFilter(e.target.value)}
         />
         <ContactsList>
-        <ContactsListItem
-        filteredContacts={filteredContacts}
-        contacts={contacts}
-        removePhone={this.removePhone}
-        />
+          <ContactsListItem filteredContacts={filteredContacts} contacts={contacts} removePhone={this.removePhone} />
         </ContactsList>
-    </>
-
+      </>
     );
   }
 }

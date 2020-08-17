@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ContactsListItem = ({filteredContacts, removePhone }) => {
+const ContactsListItem = ({ filteredContacts, removePhone }) => {
   return (
     <>
       {filteredContacts.map(contact => (
@@ -19,7 +19,6 @@ const ContactsListItem = ({filteredContacts, removePhone }) => {
 export default ContactsListItem;
 
 ContactsListItem.propTypes = {
-    filteredContacts: PropTypes.func,
-    removePhone: PropTypes.func,
-
-  };
+  filteredContacts: PropTypes.func,
+  removePhone: PropTypes.func,
+};
