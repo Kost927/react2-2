@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "./App.module.css";
 import { v4 as uuidv4 } from "uuid";
+import ContactsList from "./contactslist/ContactsList";
+import ContactsListItem from './ContactsListItem/ContactsListItem';
+import Form from "./Form/Form";
 
 class App extends Component {
   state = {
@@ -16,7 +19,6 @@ class App extends Component {
   };
 
   chengeFilter = filter => {
-    //   console.log(filter)
     this.setState({ filter });
   };
 
@@ -58,40 +60,28 @@ class App extends Component {
   };
 
   render() {
-    const { filter, name, number } = this.state;
+    const { filter, name, number, contacts } = this.state;
     const filteredContacts = this.findContacts();
     return (
+
       <>
-        <h2>Phonebook</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name: <input type="text" value={name} name="name" onChange={this.addContact} />
-          </label>
+        <Form
+        handleSubmit={this.handleSubmit}
+        name={name}
+        number={number}
+        addContact={this.addContact}
+        filter={filter}
+        chengeFilter={e => this.chengeFilter(e.target.value)}
+        />
+        <ContactsList>
+        <ContactsListItem
+        filteredContacts={filteredContacts}
+        contacts={contacts}
+        removePhone={this.removePhone}
+        />
+        </ContactsList>
+    </>
 
-          <label>
-            Number: <input type="tel" value={number} name="number" onChange={this.addContact} />
-          </label>
-
-          <button type="submit">Add contacts</button>
-        </form>
-
-        <h2>Contacts</h2>
-        <p>Find contacts by name</p>
-        <label>
-          Filter: <input type="text" value={filter} name="filter" onChange={e => this.chengeFilter(e.target.value)} />
-        </label>
-
-        <ul>
-          {filteredContacts.map(contact => (
-            <li key={contact.id} name="name">
-              {contact.name}: {contact.number}
-              <button type="button" onClick={() => this.removePhone(contact.id)}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </>
     );
   }
 }
